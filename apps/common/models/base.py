@@ -12,8 +12,13 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
 
+class BranchModel(TimeStampedModel):
+    orgunit_id = models.IntegerField(default=-1)
+    class Meta:
+        abstract = True
 
-class AuditModel(TimeStampedModel):
+
+class AuditModel(BranchModel):
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,

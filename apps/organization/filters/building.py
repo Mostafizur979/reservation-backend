@@ -8,4 +8,5 @@ class BuildingFilter(django_filters.FilterSet):
         model = Building
         fields = {
             "is_active": ["exact"],
+            "orgunit_id": ["exact"]
         }

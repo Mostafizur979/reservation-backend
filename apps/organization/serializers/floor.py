@@ -1,12 +1,13 @@
 from rest_framework import serializers
-from apps.organization.models import Building
+
+from apps.organization.models import Floor
 
 
-class BuildingSerializer(serializers.ModelSerializer):
-
+class FloorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Building
+        model = Floor
         fields = "__all__"
+
         read_only_fields = (
             "id",
             "created_at",
@@ -20,27 +21,27 @@ class BuildingSerializer(serializers.ModelSerializer):
         )
 
     def validate_code(self, value):
-        qs = Building.objects.filter(code__iexact=value)
+        qs = Floor.objects.filter(code__iexact=value)
 
         if self.instance:
             qs = qs.exclude(pk=self.instance.pk)
 
         if qs.exists():
             raise serializers.ValidationError(
-                "Building code already exists."
+                "Floor code already exists."
             )
 
-        return value.upper()
+        return value.strip().upper()
 
     def validate_name(self, value):
-        qs = Building.objects.filter(name__iexact=value)
+        qs = Floor.objects.filter(name__iexact=value)
 
         if self.instance:
             qs = qs.exclude(pk=self.instance.pk)
 
         if qs.exists():
             raise serializers.ValidationError(
-                "Building name already exists."
+                "Floor name already exists."
             )
 
         return value.strip()
