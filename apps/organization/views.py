@@ -1,15 +1,16 @@
 from apps.common.api.mixins import BaseModelViewSet
 
+#Filter
 from apps.organization.filters.building import BuildingFilter
 from apps.organization.filters.floor import FloorFilter
 
-from apps.organization.models import Building, Floor
+#Model
+from apps.organization.models import Building, Floor, Section
 
+#Serializer
 from apps.organization.serializers.building import BuildingSerializer
 from apps.organization.serializers.floor import FloorSerializer
-
-
-
+from apps.organization.serializers.section import SectionSerializer
 class BuildingViewSet(BaseModelViewSet):
     queryset = Building.objects.all()
     serializer_class = BuildingSerializer
@@ -19,20 +20,6 @@ class BuildingViewSet(BaseModelViewSet):
     ordering_fields = ( "name", "code", "created_at")
     ordering = ("name")
 
-    def perform_create(self, serializer):
-        serializer.save(
-            created_by=self.request.user
-            if self.request.user.is_authenticated
-            else None
-        )
-
-    def perform_update(self, serializer):
-        serializer.save(
-            updated_by=self.request.user
-            if self.request.user.is_authenticated
-            else None
-        )
-
 class FloorViewSet(BaseModelViewSet):
     queryset = Floor.objects.all()
     serializer_class = FloorSerializer
@@ -41,17 +28,9 @@ class FloorViewSet(BaseModelViewSet):
     search_fields = ("name","code")
     ordering_fields = ("name", "number")
     ordering = ("name")
+class SectionViewSet(BaseModelViewSet):
+    queryset = Section.objects.all()
+    serializer_class = SectionSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(
-            created_by=self.request.user
-            if self.request.user.is_authenticated
-            else None
-        )
-
-    def perform_update(self, serializer):
-        serializer.save(
-            updated_by = self.request.user
-            if self.request.user.is_authenticated
-            else None
-        )
+    search_fields = ("name", "code")
+    ordering_fields = ("name", "code")
