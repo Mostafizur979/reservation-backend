@@ -12,7 +12,11 @@ class BaseModelViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        serializer.save(
+            created_by=self.request.user
+            if self.request.user.is_authenticated
+            else None
+        )
         return ApiResponse.success(
             data=serializer.data,
             message="Created successfully.",
@@ -24,7 +28,11 @@ class BaseModelViewSet(ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        serializer.save(
+            updated_by = self.request.user
+            if self.request.user.is_authenticated
+            else None
+        )
         return ApiResponse.success(
             data=serializer.data,
             message="Updated successfully.",

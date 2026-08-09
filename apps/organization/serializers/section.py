@@ -17,3 +17,16 @@ class SectionSerializer(serializers.ModelSerializer):
             "is_deleted",
             "orgunit_id",
         )
+
+    def validate_code(self, value):
+        qs = Section.objects.filter(code__iexact=value)
+
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+
+        if qs.exists():
+            raise serializers.ValidationError(
+                "Section code already exists."
+            )
+
+        return value.strip().upper()

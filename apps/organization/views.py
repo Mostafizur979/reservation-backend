@@ -28,6 +28,7 @@ class FloorViewSet(BaseModelViewSet):
     search_fields = ("name","code")
     ordering_fields = ("name", "number")
     ordering = ("name")
+    
 class SectionViewSet(BaseModelViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
