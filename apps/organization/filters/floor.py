@@ -6,5 +6,6 @@ class FloorFilter(django_filters.FilterSet):
         model = Floor
         fields = {
             "is_active": ["exact"],
-            "building": ["exact"]
+            "building": ["exact"],
+            "orgunit_id": ["exact"]
         }

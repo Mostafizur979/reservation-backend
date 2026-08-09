@@ -1,16 +1,13 @@
 from apps.common.api.mixins import BaseModelViewSet
 
 #Filter
-from apps.organization.filters.building import BuildingFilter
-from apps.organization.filters.floor import FloorFilter
+from apps.organization.filters import BuildingFilter, FloorFilter, SectionFilter
 
 #Model
 from apps.organization.models import Building, Floor, Section
 
 #Serializer
-from apps.organization.serializers.building import BuildingSerializer
-from apps.organization.serializers.floor import FloorSerializer
-from apps.organization.serializers.section import SectionSerializer
+from apps.organization.serializers import BuildingSerializer, SectionSerializer, FloorSerializer
 class BuildingViewSet(BaseModelViewSet):
     queryset = Building.objects.all()
     serializer_class = BuildingSerializer
@@ -32,6 +29,7 @@ class FloorViewSet(BaseModelViewSet):
 class SectionViewSet(BaseModelViewSet):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
+    filterset_class = SectionFilter
 
     search_fields = ("name", "code")
     ordering_fields = ("name", "code")
