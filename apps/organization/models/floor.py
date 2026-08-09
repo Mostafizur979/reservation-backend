@@ -3,18 +3,16 @@ from django.db import models
 from apps.organization.models.building import Building
 
 class Floor(SoftDeleteModel):
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200, unique=True, null = False)
     number = models.IntegerField(null = False)
-    code = models.CharField(max_length=30, unique=True)
+    code = models.CharField(max_length=30, unique=True, null = False)
     description = models.TextField(null = True)
     building = models.ForeignKey(
         Building,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        null=False,
+        on_delete=models.PROTECT,
         related_name="floors",
     )
-
     class Meta:
         db_table = "building_floors"
         ordering = ["name", "number"]
