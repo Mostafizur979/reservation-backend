@@ -14,7 +14,7 @@ class Image(SoftDeleteModel):
 
     image = models.ImageField(
         upload_to="room-categories/",
-        max_length=500,
+        max_length=500
     )
 
     is_primary = models.BooleanField(

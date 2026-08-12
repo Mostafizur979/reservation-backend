@@ -11,9 +11,9 @@ def get_r2_client():
     return session.client(
         "s3",
         region_name="auto",
-        endpoint_url="https://6a212d8be3277e3bfad2c5c045d93242.r2.cloudflarestorage.com",
-        aws_access_key_id="2e0121fc07f7f908e575030d76306642",
-        aws_secret_access_key="88cee7c95464305d3f0c72f4affbb79967b6819024fb949c92a5945efa37bb82",
+        endpoint_url=settings.AWS_ENDPOINT_URL,
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
     )
 
 
@@ -37,14 +37,14 @@ def upload_to_r2(file, folder="uploads"):
 
     client.upload_fileobj(
         file,
-        "ecommerce",
+        settings.AWS_BUCKET,
         object_key,
         ExtraArgs={
             "ContentType": file.content_type,
         },
     )
 
-    return f"{"https://pub-6f0a5190b9134becbdbeee087f020a55.r2.dev"}/{quote(object_key)}"
+    return f"{settings.AWS_PUBLIC_URL}/{quote(object_key)}"
 
 
 def remove_from_r2(file_url):
@@ -57,7 +57,7 @@ def remove_from_r2(file_url):
 
     client = get_r2_client()
 
-    public_url = settings.R2_PUBLIC_URL.rstrip("/")
+    public_url = settings.AWS_PUBLIC_URL.rstrip("/")
 
     if not file_url.startswith(public_url):
         return
@@ -65,6 +65,6 @@ def remove_from_r2(file_url):
     object_key = file_url[len(public_url) + 1:]
 
     client.delete_object(
-        Bucket=settings.R2_BUCKET,
+        Bucket=settings.AWS_BUCKET,
         Key=object_key,
     )
